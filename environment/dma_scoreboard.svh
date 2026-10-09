@@ -728,7 +728,11 @@ class dma_scoreboard extends uvm_scoreboard;
             x.post_seen  = 0;
             x.dead_beats = 0;
             note_stop(x, why);
-            if (may_land && x.pend.size()) infl.push_back('{ch: h.ch, item: x.pend[0], kill_edge: K});
+            if (may_land && x.pend.size()) begin
+                dma_infl_t f;   // VCS cannot pass this struct literal to push_back directly
+                f = '{ch: h.ch, item: x.pend[0], kill_edge: K};
+                infl.push_back(f);
+            end
             x.pend.delete();
         end
     endfunction
