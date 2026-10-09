@@ -100,6 +100,8 @@ module channel_manager #(
     end
   end
 
+  logic [$clog2(NUM_CHANNELS)-1:0] write_channel;
+  logic control_written;
   always_comb begin : RUN_EDGES
     for (int i = 0; i < NUM_CHANNELS; i++) begin
       run_start[i] = control_written && (write_channel == i[$clog2(NUM_CHANNELS)-1:0]) &&
@@ -152,9 +154,7 @@ module channel_manager #(
     end
   end
 
-  logic [$clog2(NUM_CHANNELS)-1:0] write_channel;
   logic [$clog2(NUM_CHANNELS)-1:0] read_channel;
-  logic control_written;
   logic [DATA_SIZE-1:0] normalized_control;
   logic [DATA_SIZE-1:0] normalized_status;
   logic control_range;
