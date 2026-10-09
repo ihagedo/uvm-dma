@@ -1,4 +1,4 @@
-== RTL: /home/hagedata/UW-Madison/SiliconBadgers/silicon-badgers-uvm-onboarding/examples/dma/rtl
+== RTL: /home/hagedata/UW-Madison/SiliconBadgers/uvm-dma/rtl
 == Verilator 5.052 2026-09-05 rev conda-forge build 
 
 == 1. dma_probe_tb.sv, 8 channels (spec claims marked 'sim')
