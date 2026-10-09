@@ -1,6 +1,6 @@
 # uvm-dma
 
-A worked example of the [SiliconBadgers UVM training](https://github.com/ihagedo/uvm-training). A complete UVM testbench for an AHB DMA controller with 2–32 channels, built from a spec and a test plan: three AHB agents, a register model, reactive memories that inject wait states and errors, a reference model that predicts every bus transfer, assertions, coverage, and a regression that must catch sixteen planted bugs.
+Worked example 4 of the [SiliconBadgers UVM training](https://github.com/ihagedo/uvm-training). A complete UVM testbench for an AHB DMA controller with 2–32 channels, built from a spec and a test plan: three AHB agents, a register model, reactive memories that inject wait states and errors, a reference model that predicts every bus transfer, assertions, coverage, and a regression that must catch sixteen planted bugs.
 
 ![DMA block diagram](./docs/dma_controller_block.svg)
 
