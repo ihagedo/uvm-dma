@@ -1,0 +1,91 @@
+== RTL: /home/hagedata/UW-Madison/SiliconBadgers/silicon-badgers-uvm-onboarding/examples/dma/rtl
+== Verilator 5.052 2026-09-05 rev conda-forge build 
+
+== 1. dma_probe_tb.sv, 8 channels (spec claims marked 'sim')
+PASS REG-RESET-1  SOURCE/DESTINATION/CONTROL/DESIRED_TRANSFERS and all 4 status registers read 0 after reset
+PASS REG-RESET-2  TRIGGER_CONFIG resets to 0x0001_0000 (got 00010000)
+PASS REG-RESET-3  TRIGGER_STATUS resets to 0
+PASS REG-RESET-4  dma_interrupt is 0 after reset
+PASS REG-RW-1  SOURCE stores all 32 bits, unaligned values included
+PASS REG-RW-2  DESIRED_TRANSFERS stores all 32 bits
+PASS REG-CTRL-1  CONTROL bits 25 and 3:2 (documented unused) are stored and read back (got 0200000c)
+PASS REG-CTRL-2  a software write of DONE=1 sets DONE and raises dma_interrupt
+PASS REG-CTRL-3  a software write of ERROR=1 (DONE=0) keeps dma_interrupt high
+PASS REG-CTRL-4  writing CONTROL=0 clears DONE/ERROR and lowers dma_interrupt
+PASS REG-ERR-1  byte store (HSIZE=byte, HWSTRB=0001) returns ERROR and changes nothing
+PASS REG-ERR-2  halfword store returns ERROR and changes nothing
+PASS REG-ERR-3  word store with HWSTRB != 1111 returns ERROR and changes nothing
+PASS REG-LD-1  byte load at offset +0 is OKAY and returns the whole register (got deadbee1)
+PASS REG-LD-2  byte load at offset +1 returns ERROR (any address with bits 1:0 != 0)
+PASS REG-LD-3  halfword load at offset +2 returns ERROR
+PASS REG-MAP-1  read just past the trigger block (offset 00000140) returns ERROR
+PASS REG-MAP-2  write to offset 0xFFC returns ERROR
+PASS REG-MAP-3  last trigger register responds OKAY
+PASS REG-STAT-1  write to TRANSFERS_COMPLETED is OKAY and has no effect
+PASS REG-TRIG-1  TRIGGER_CONFIG stores all 32 bits, undocumented ones included (got ffffff7f)
+PASS REG-TRIG-2  write to TRIGGER_STATUS is OKAY and leaves CREDIT unchanged
+OBS TIMELINE n=4 src_lat=0 dst_lat=0: CONTROL write data phase = cycle 0; first read address phase +5; first write address phase +8; last write data phase +12; DONE visible +14; dma_interrupt high +14; reads=4 writes=4; TRANSFERS_COMPLETED=4
+PASS TL-4-00  DONE and dma_interrupt rise in the same cycle; every item written once
+TABLE | Cycle | ENABLE | Read port address phase | Read data | Write port address phase | Write data | DONE | dma_interrupt |
+TABLE | 0 | 0 |  |  |  |  | 0 | 0 |
+TABLE | 1 | 1 |  |  |  |  | 0 | 0 |
+TABLE | 2 | 1 |  |  |  |  | 0 | 0 |
+TABLE | 3 | 1 |  |  |  |  | 0 | 0 |
+TABLE | 4 | 1 |  |  |  |  | 0 | 0 |
+TABLE | 5 | 1 | NONSEQ SINGLE `0100` |  |  |  | 0 | 0 |
+TABLE | 6 | 1 | NONSEQ SINGLE `0104` | `a0a00040` |  |  | 0 | 0 |
+TABLE | 7 | 0 | NONSEQ SINGLE `0108` | `a0a00041` |  |  | 0 | 0 |
+TABLE | 8 | 0 | NONSEQ SINGLE `010c` | `a0a00042` | NONSEQ SINGLE `0900` |  | 0 | 0 |
+TABLE | 9 | 0 |  | `a0a00043` | NONSEQ SINGLE `0904` | `a0a00040` | 0 | 0 |
+TABLE | 10 | 0 |  |  | NONSEQ SINGLE `0908` | `a0a00041` | 0 | 0 |
+TABLE | 11 | 0 |  |  | NONSEQ SINGLE `090c` | `a0a00042` | 0 | 0 |
+TABLE | 12 | 0 |  |  |  | `a0a00043` | 0 | 0 |
+TABLE | 13 | 0 |  |  |  |  | 0 | 0 |
+TABLE | 14 | 0 |  |  |  |  | 1 | 1 |
+TABLE | 15 | 0 |  |  |  |  | 1 | 1 |
+OBS TIMELINE n=1 src_lat=0 dst_lat=0: CONTROL write data phase = cycle 0; first read address phase +5; first write address phase +8; last write data phase +9; DONE visible +11; dma_interrupt high +11; reads=1 writes=1; TRANSFERS_COMPLETED=1
+PASS TL-1-00  DONE and dma_interrupt rise in the same cycle; every item written once
+OBS TIMELINE n=16 src_lat=0 dst_lat=0: CONTROL write data phase = cycle 0; first read address phase +5; first write address phase +8; last write data phase +24; DONE visible +26; dma_interrupt high +26; reads=16 writes=16; TRANSFERS_COMPLETED=16
+PASS TL-16-00  DONE and dma_interrupt rise in the same cycle; every item written once
+OBS TIMELINE n=4 src_lat=2 dst_lat=2: CONTROL write data phase = cycle 0; first read address phase +5; first write address phase +10; last write data phase +24; DONE visible +26; dma_interrupt high +26; reads=4 writes=4; TRANSFERS_COMPLETED=4
+PASS TL-4-22  DONE and dma_interrupt rise in the same cycle; every item written once
+PASS EDGE-ZERO-1  one-shot with DESIRED_TRANSFERS=0: DONE sets, ENABLE clears, no bus traffic
+PASS EDGE-MODE-1  MODE=3: DONE sets, ENABLE clears, no bus traffic
+PASS EDGE-ZERO-2  continuous with DESIRED_TRANSFERS=0: DONE sets, ENABLE clears, no bus traffic
+PASS EDGE-TRIG-1  trigger armed + one-shot: the channel stops, DONE stays 0, nothing moves
+PASS EDGE-TRIG-2  after disarming, ENABLE=1 starts the copy and it completes
+OBS BYTE-COPY read HADDR=00000301,00000302 HSIZE=0,0 | write HADDR=00000b02,00000b03 HSIZE=0,0 HWSTRB=0100,1000
+PASS AHB-SUB-1  byte item at 0x301 -> 0xB02: HADDR is the item address, HSIZE=byte, HWSTRB=0100
+PASS AHB-SUB-2  word item at misaligned 0x402: the controller silently reads the aligned word at 0x400
+PASS AHB-SIZE3-1  SIZE=3: DONE sets, ENABLE clears, no bus traffic
+OBS ABORT after 10 cycles of a 200-item copy: TRANSFERS_COMPLETED=10 CONTROL=00040402
+PASS EDGE-ABORT-1  ABORT self-clears, ENABLE and DONE stay 0, and the copy stops part-way
+OBS BURST 16 words, latency 1/3: 3 read INCR4 bursts, 3 write INCR4 bursts (of 16 reads, 16 writes)
+PASS AHB-BURST-1  with slow memory, consecutive word items go out as INCR4 bursts
+OBS BURST-1KB 12 copies of 16 words starting 0x3C0..0x3EC: read bursts 27 (crossing 1 KB: 0), write bursts 27 (crossing: 0)
+PASS AHB-BURST-2  no INCR4 burst crosses a 1 KB boundary
+PASS ARB-CONT-1  while a continuous channel runs, a one-shot on another channel moves nothing
+PASS ARB-CONT-2  once the continuous channel is stopped (ENABLE=0), the waiting one-shot runs and completes
+OBS WERR write address/strobe sequence: 00003ff8/1111 00003ffc/1111 00004000/1111/ERR 00004004/0000/ERR ; ERROR_ADDRESS=00004000 ERROR=1
+PASS ERR-WR-1  write error records ERROR_ADDRESS=0x4000 and sets ERROR
+OBS WERR address phases completed with HWSTRB=0000 (no byte written): 1
+OBS RACE continuous: 29 CONTROL writes landed in the same cycle as a pass end; DONE lost in 0 of them
+PASS RACE-1  a CONTROL write in the cycle a pass ends keeps that pass's DONE
+PASS RACE-2  one-shot: a CONTROL write near completion never loses DONE
+DONE NCH=8 FIFO_DEPTH=16 fails=0
+
+== 2. Parameter checks: each must stop elaboration
+NUM_CHANNELS=1: %Error: source/trigger_controller.sv:92:69: Size-changing cast to zero or negative size: 0
+NUM_CHANNELS=3: %Error-USERERROR: source/dma_controller.sv:29:5: dma_controller: NUM_CHANNELS must be a power of 2 from 2 to 32 (got 3)
+NUM_CHANNELS=64: %Error-USERERROR: source/dma_controller.sv:29:5: dma_controller: NUM_CHANNELS must be a power of 2 from 2 to 32 (got 64)
+NUM_SOURCES=3: %Error-USERERROR: source/dma_controller.sv:33:5: dma_controller: NUM_SOURCES must be a power of 2 from 2 to 128 (got 3)
+FIFO_DEPTH=2: %Error-USERERROR: source/dma_controller.sv:36:5: dma_controller: FIFO_DEPTH must be a power of 2 >= 4 (got 2)
+FIFO_DEPTH=6: %Error-USERERROR: source/dma_controller.sv:36:5: dma_controller: FIFO_DEPTH must be a power of 2 >= 4 (got 6)
+
+== 3. Parameter sweep (NUM_CHANNELS, FIFO_DEPTH): reset values + three copies with bursts
+NUM_CHANNELS=2 FIFO_DEPTH=16: DONE NCH=2 FIFO_DEPTH=16 fails=0 
+NUM_CHANNELS=4 FIFO_DEPTH=16: DONE NCH=4 FIFO_DEPTH=16 fails=0 
+NUM_CHANNELS=32 FIFO_DEPTH=16: DONE NCH=32 FIFO_DEPTH=16 fails=0 
+NUM_CHANNELS=8 FIFO_DEPTH=4: DONE NCH=8 FIFO_DEPTH=4 fails=0 
+NUM_CHANNELS=8 FIFO_DEPTH=8: DONE NCH=8 FIFO_DEPTH=8 fails=0 
+NUM_CHANNELS=8 FIFO_DEPTH=32: DONE NCH=8 FIFO_DEPTH=32 fails=0 
