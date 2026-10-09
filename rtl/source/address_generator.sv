@@ -136,6 +136,7 @@ module address_generator #(
   logic [DATA_SIZE-1:0] recent_source;
   logic [DATA_SIZE-1:0] recent_dest;
 
+  logic [NUM_CHANNELS-1:0] clear_ring;
   always_comb begin
     wen_r = 0;
     read_address_data_in = '0;
@@ -311,7 +312,6 @@ module address_generator #(
 
   // Ring buffer
 
-  logic [NUM_CHANNELS-1:0] clear_ring;
 
   // Stopped rings restart
   always_comb begin
