@@ -1,0 +1,83 @@
+baseline (unmodified RTL), C1: all tests pass
+
+M1 (R12): the interrupt ignores ERROR (only DONE raises it)
+  CAUGHT by 6/17 tests: copy, error, perf, rand_err, reg, stop
+  reported by: IRQ, SVA09
+  first message: dma_interrupt=0 but the OR of DONE|ERROR is 1  [R12]
+
+M2 (R07): a one-shot copy sets DONE one write early
+  CAUGHT by 15/17 tests: bus, channels, copy, corner, error, perf, rand_err, rand_reg, rand_stop, rand, reg, restart_race, smoke, stop, trigger
+  reported by: IRQ, RD, REG
+  first message: edge 43: dma_interrupt is 1 but no channel can have DONE or ERROR set  [R12]
+
+M3 (R13): a read ERROR does not clear the channel's ENABLE
+  CAUGHT by 3/17 tests: error, rand_err, stop
+  reported by: RD, REG, WR
+  first message: unexpected read RD R 10000018 size=2 data=f41a1436 SINGLE      beat0 @30: ch0 run1 (  one-shot size=2 steps=4/4, 24 items from 10000000 to 2000e000, ERRORED) expects no m
+
+M4 (R05): starting a run does not zero ERROR_ADDRESS
+  CAUGHT by 3/17 tests: copy, error, rand_err
+  reported by: REG
+  first message: ch1 ERROR_ADDRESS read 10100008, model 00000000  [R13 R22]
+
+M5 (R02): reads of unmapped offsets answer OKAY instead of ERROR
+  CAUGHT by 2/17 tests: rand_reg, reg
+  reported by: REG, SVA07
+  first message: register access to 90001140 (unmapped, unaligned or partial write) got HREADY=1 HRESP=0 in its first data cycle  [P4]
+
+M6 (R15): ABORT never clears itself
+  CAUGHT by 4/17 tests: modes, rand_reg, reg, stop
+  reported by: REG
+  first message: ch0 CONTROL read 01000000 at edge 6999: ABORT=1 (model 00000000)  [R05 R07 R13 R15-R18 R21]
+
+M7 (R20): an armed ring channel ignores its trigger credit
+  CAUGHT by 1/17 tests: trigger
+  reported by: TRIG
+  first message: ch1 moved 1 items but was given only 0 credits  [R20]
+
+M8 (R09): a source-stepping ring uses DEST_INCR as its step
+  CAUGHT by 6/17 tests: modes, rand_err, rand_reg, rand_stop, rand, stop
+  reported by: ARB, IRQ, RD, WR
+  first message: unexpected read RD R 10200006 size=1 data=4edd287a SINGLE      beat0 @930: ch2 run2 (      ring size=1 steps=2/6 ring=2 sel=0, 16 items from 10200000 to 20200000, RUNNING
+
+M9 (R10): halfword write strobes pick the wrong half of the word
+  CAUGHT by 10/17 tests: bus, channels, copy, modes, rand_err, rand_reg, rand_stop, rand, stop, trigger
+  reported by: SVA05, WR
+  first message: WR port: HWSTRB=0011 outside the lanes of HADDR=20003a02 HSIZE=1  [P6]
+
+M10 (R13): a dropped item is still written, with its strobes on
+  CAUGHT by 3/17 tests: error, rand_err, restart_race
+  reported by: MEM, WR
+  first message: unexpected write (no item of ch2 is waiting to be written): WR W 20206010 size=2 strb=1111 data=b742b92c  INCR4      beat1 waits=2 @387  [R06 R13 R15 R16]
+
+M11 (R11, P7): halfword items are put in INCR4 read bursts too
+  CAUGHT by 6/17 tests: bus, rand_err, rand_reg, rand_stop, rand, stop
+  reported by: SVA01
+  first message: RD port: SEQ to 10700004 does not continue an INCR4 (previous 10700000 burst 3 beat 0)
+
+M12 (R04, R20): a write to TRIGGER_STATUS also clears CREDIT
+  CAUGHT by 1/17 tests: trigger
+  reported by: REG
+  first message: ch0 TRIGGER_STATUS read 00000000: CREDIT 0 not in [4095,4095] or reserved bits set  [R20]
+
+M13 (R19): the arbiter always searches from channel 0 (fixed priority, not round robin)
+  CAUGHT by 6/17 tests: channels, error, rand_err, rand_reg, rand_stop, rand
+  reported by: ARB
+  first message: after ch4 the grant went to ch0, but ch5 (waiting since edge 852) comes first in round-robin order  [R19]  (ch4 run4 (  one-shot size=2 steps=4/4, 320 items from 10400000
+
+M14 (R03): DESIRED_TRANSFERS resets to 1 instead of 0
+  CAUGHT by 8/17 tests: bad_cfg, corner, perf, reg, restart_race, smoke, stop, trigger
+  reported by: REG, RegModel
+  first message: ch1 R_DESIRED read 00000001, expected 00000000  [R01] (CFG R 9000101c size=2 data=00000001 @201)
+
+M15 (R08): a continuous pass is one item too long
+  CAUGHT by 11/17 tests: bus, channels, corner, error, modes, rand_err, rand_reg, rand_stop, rand, stop, trigger
+  reported by: IRQ, MEM, RD, REG, WR
+  first message: unexpected read RD R 1001b4b7 size=0 data=23d04dbe SINGLE      beat0 @124: ch0 run1 (  one-shot size=2 steps=4/252, 37 items from 1001b328 to 20024280, RUNNING) expects n
+
+M16 (R10, P6): a halfword read takes the wrong half of HRDATA
+  CAUGHT by 9/17 tests: bus, channels, copy, modes, rand_err, rand_reg, rand_stop, rand, stop
+  reported by: WR
+  first message: ch1 item 0: wrote WR W 20103000 size=1 strb=0011 data=0000d8c5 SINGLE      beat0 @3123, expected HADDR 20103000 HSIZE 1 HWSTRB 0011 data 00007bf9  [R06 R08-R10 P6]
+
+MUTANTS ALL CAUGHT

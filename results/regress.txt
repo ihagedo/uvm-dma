@@ -1,0 +1,419 @@
+== C1: NUM_CHANNELS=8 FIFO_DEPTH=16; 5 seed(s) per directed test, 50 per random test
+  tests
+    dma_smoke_test             5/5 passed       2570 compares
+    dma_reg_test               5/5 passed     140782 compares
+    dma_copy_test              5/5 passed      61530 compares
+    dma_channels_test          5/5 passed      38123 compares
+    dma_modes_test             5/5 passed      47580 compares
+    dma_bus_test               5/5 passed      90577 compares
+    dma_error_test             5/5 passed      92876 compares
+    dma_stop_test              5/5 passed      80157 compares
+    dma_bad_cfg_test           5/5 passed       2815 compares
+    dma_trigger_test           5/5 passed      40666 compares
+    dma_corner_test            5/5 passed      33665 compares
+    dma_restart_race_test      5/5 passed       8825 compares
+    dma_perf_test              5/5 passed       9455 compares
+    dma_rand_test              50/50 passed    1871604 compares
+    dma_rand_err_test          50/50 passed    1815590 compares
+    dma_rand_stop_test         50/50 passed    1844823 compares
+    dma_rand_reg_test          50/50 passed    1911571 compares
+  functional coverage: 267/267 bins
+    cg_active        8/8    bins hit
+    cg_bus          37/37   bins hit
+    cg_cfg          37/37   bins hit
+    cg_conc         16/16   bins hit
+    cg_error        41/41   bins hit
+    cg_irq           6/6    bins hit
+    cg_irq_clear     2/2    bins hit
+    cg_reg          52/52   bins hit
+    cg_ring         26/26   bins hit
+    cg_stop         31/31   bins hit
+    cg_trig          8/8    bins hit
+    cg_trig_evt      3/3    bins hit
+  DUT code coverage (merged over instances)      line        branch      expr        toggle
+    address_generator.sv        30/30       26/26       64/67     3746/4368 
+    ahb_read_manager.sv         31/43       38/48       99/112     866/1268 
+    ahb_subordinate.sv          25/30       17/18       52/57      130/164  
+    ahb_write_manager.sv        41/55       54/62      130/142     966/1256 
+    channel_csr.sv               1/1         2/2         2/2       764/1028 
+    channel_manager.sv          44/48       52/52      105/105    6000/8958 
+    dma_arbiter.sv               4/4         6/6         8/9        64/64   
+    dma_controller.sv             -          -          -      1062/1400 
+    dma_engine.sv                2/2         4/4        14/14     2678/2830 
+    dma_fifo.sv                  8/8         8/8        21/21      470/470  
+    trigger_controller.sv        5/5        18/18       92/107    1926/2738 
+    socetlib_counter.sv          5/5         6/6          -       132/270  
+    total                      84.8 %      92.4 %      92.3 %      75.8 %   
+  line/branch holes: 54
+      miss branch ahb_read_manager.sv:309 else
+      miss branch ahb_read_manager.sv:309 if
+      miss branch ahb_read_manager.sv:310 if
+      miss branch ahb_read_manager.sv:310 else
+      miss branch ahb_read_manager.sv:336 cond_then
+      miss branch ahb_read_manager.sv:337 if
+      miss branch ahb_read_manager.sv:424 else
+      miss branch ahb_read_manager.sv:424 if
+      miss branch ahb_read_manager.sv:428 if
+      miss branch ahb_read_manager.sv:428 else
+      miss line   ahb_read_manager.sv:80 case
+      miss line   ahb_read_manager.sv:81 case
+      miss line   ahb_read_manager.sv:82 case
+      miss line   ahb_read_manager.sv:89 case
+      miss line   ahb_read_manager.sv:90 case
+      miss line   ahb_read_manager.sv:91 case
+      miss line   ahb_read_manager.sv:252 if
+      miss line   ahb_read_manager.sv:290 if
+      miss line   ahb_read_manager.sv:308 case
+      miss line   ahb_read_manager.sv:331 case
+      miss line   ahb_read_manager.sv:422 case
+      miss line   ahb_read_manager.sv:439 case
+      miss branch ahb_subordinate.sv:217 else
+      miss line   ahb_subordinate.sv:81 case
+      miss line   ahb_subordinate.sv:123 else
+      miss line   ahb_subordinate.sv:150 case
+      miss line   ahb_subordinate.sv:179 if
+      miss line   ahb_subordinate.sv:192 case
+      miss branch ahb_write_manager.sv:243 else
+      miss branch ahb_write_manager.sv:320 else
+      miss branch ahb_write_manager.sv:320 if
+      miss branch ahb_write_manager.sv:398 else
+      miss branch ahb_write_manager.sv:398 if
+      miss branch ahb_write_manager.sv:405 else
+      miss branch ahb_write_manager.sv:405 if
+      miss branch ahb_write_manager.sv:447 else
+      miss line   ahb_write_manager.sv:111 case
+      miss line   ahb_write_manager.sv:112 case
+      miss line   ahb_write_manager.sv:113 case
+      miss line   ahb_write_manager.sv:120 case
+      miss line   ahb_write_manager.sv:121 case
+      miss line   ahb_write_manager.sv:122 case
+      miss line   ahb_write_manager.sv:303 if
+      miss line   ahb_write_manager.sv:319 case
+      miss line   ahb_write_manager.sv:335 case
+      miss line   ahb_write_manager.sv:381 case
+      miss line   ahb_write_manager.sv:392 case
+      miss line   ahb_write_manager.sv:397 case
+      miss line   ahb_write_manager.sv:480 case
+      miss line   ahb_write_manager.sv:489 case
+      miss line   channel_manager.sv:190 case
+      miss line   channel_manager.sv:196 case
+      miss line   channel_manager.sv:212 case
+      miss line   channel_manager.sv:221 case
+
+== C2: NUM_CHANNELS=2 FIFO_DEPTH=4; 5 seed(s) per directed test, 50 per random test
+  tests
+    dma_smoke_test             5/5 passed       1370 compares
+    dma_reg_test               5/5 passed      80978 compares
+    dma_copy_test              5/5 passed      62496 compares
+    dma_channels_test          5/5 passed      13072 compares
+    dma_modes_test             5/5 passed      63123 compares
+    dma_bus_test               5/5 passed      84657 compares
+    dma_error_test             5/5 passed      87449 compares
+    dma_stop_test              5/5 passed      73067 compares
+    dma_bad_cfg_test           5/5 passed       1615 compares
+    dma_trigger_test           5/5 passed      42966 compares
+    dma_corner_test            5/5 passed      31120 compares
+    dma_restart_race_test      5/5 passed       9145 compares
+    dma_perf_test              5/5 passed       8435 compares
+    dma_rand_test              50/50 passed    1497826 compares
+    dma_rand_err_test          50/50 passed    1409406 compares
+    dma_rand_stop_test         50/50 passed    1486623 compares
+    dma_rand_reg_test          50/50 passed    1454857 compares
+  functional coverage: 220/220 bins
+    cg_active        2/2    bins hit
+    cg_bus          15/15   bins hit
+    cg_cfg          37/37   bins hit
+    cg_conc          9/9    bins hit
+    cg_error        29/29   bins hit
+    cg_irq           6/6    bins hit
+    cg_irq_clear     2/2    bins hit
+    cg_reg          52/52   bins hit
+    cg_ring         26/26   bins hit
+    cg_stop         31/31   bins hit
+    cg_trig          8/8    bins hit
+    cg_trig_evt      3/3    bins hit
+  DUT code coverage (merged over instances)      line        branch      expr        toggle
+    address_generator.sv        30/30       26/26       64/67     1430/1808 
+    ahb_read_manager.sv         29/43       35/48       88/112     723/1188 
+    ahb_subordinate.sv          25/30       17/18       52/57      130/164  
+    ahb_write_manager.sv        41/55       54/62      127/142     836/1168 
+    channel_csr.sv               1/1         2/2         2/2       732/1028 
+    channel_manager.sv          44/48       52/52      105/105    1786/2634 
+    dma_arbiter.sv               4/4         6/6         8/9        24/24   
+    dma_controller.sv             -          -          -       914/1296 
+    dma_engine.sv                2/2         4/4        14/14     1014/1178 
+    dma_fifo.sv                  8/8         8/8        21/21      970/970  
+    trigger_controller.sv        5/5        18/18       46/47      818/990  
+    socetlib_counter.sv          5/5         6/6          -       132/270  
+    total                      84.0 %      91.2 %      91.5 %      74.8 %   
+  line/branch holes: 59
+      miss branch ahb_read_manager.sv:309 else
+      miss branch ahb_read_manager.sv:309 if
+      miss branch ahb_read_manager.sv:310 if
+      miss branch ahb_read_manager.sv:310 else
+      miss branch ahb_read_manager.sv:336 cond_then
+      miss branch ahb_read_manager.sv:337 if
+      miss branch ahb_read_manager.sv:357 cond_then
+      miss branch ahb_read_manager.sv:362 cond_else
+      miss branch ahb_read_manager.sv:365 cond_then
+      miss branch ahb_read_manager.sv:424 else
+      miss branch ahb_read_manager.sv:424 if
+      miss branch ahb_read_manager.sv:428 if
+      miss branch ahb_read_manager.sv:428 else
+      miss line   ahb_read_manager.sv:80 case
+      miss line   ahb_read_manager.sv:81 case
+      miss line   ahb_read_manager.sv:82 case
+      miss line   ahb_read_manager.sv:89 case
+      miss line   ahb_read_manager.sv:90 case
+      miss line   ahb_read_manager.sv:91 case
+      miss line   ahb_read_manager.sv:227 elsif
+      miss line   ahb_read_manager.sv:252 if
+      miss line   ahb_read_manager.sv:265 elsif
+      miss line   ahb_read_manager.sv:290 if
+      miss line   ahb_read_manager.sv:308 case
+      miss line   ahb_read_manager.sv:331 case
+      miss line   ahb_read_manager.sv:422 case
+      miss line   ahb_read_manager.sv:439 case
+      miss branch ahb_subordinate.sv:217 else
+      miss line   ahb_subordinate.sv:81 case
+      miss line   ahb_subordinate.sv:123 else
+      miss line   ahb_subordinate.sv:150 case
+      miss line   ahb_subordinate.sv:179 if
+      miss line   ahb_subordinate.sv:192 case
+      miss branch ahb_write_manager.sv:243 else
+      miss branch ahb_write_manager.sv:320 else
+      miss branch ahb_write_manager.sv:320 if
+      miss branch ahb_write_manager.sv:398 else
+      miss branch ahb_write_manager.sv:398 if
+      miss branch ahb_write_manager.sv:405 else
+      miss branch ahb_write_manager.sv:405 if
+      miss branch ahb_write_manager.sv:447 else
+      miss line   ahb_write_manager.sv:111 case
+      miss line   ahb_write_manager.sv:112 case
+      miss line   ahb_write_manager.sv:113 case
+      miss line   ahb_write_manager.sv:120 case
+      miss line   ahb_write_manager.sv:121 case
+      miss line   ahb_write_manager.sv:122 case
+      miss line   ahb_write_manager.sv:303 if
+      miss line   ahb_write_manager.sv:319 case
+      miss line   ahb_write_manager.sv:335 case
+      miss line   ahb_write_manager.sv:381 case
+      miss line   ahb_write_manager.sv:392 case
+      miss line   ahb_write_manager.sv:397 case
+      miss line   ahb_write_manager.sv:480 case
+      miss line   ahb_write_manager.sv:489 case
+      miss line   channel_manager.sv:190 case
+      miss line   channel_manager.sv:196 case
+      miss line   channel_manager.sv:212 case
+      miss line   channel_manager.sv:221 case
+
+== C3: NUM_CHANNELS=32 FIFO_DEPTH=16; 5 seed(s) per directed test, 50 per random test
+  tests
+    dma_smoke_test             5/5 passed       7370 compares
+    dma_reg_test               5/5 passed     167294 compares
+    dma_copy_test              5/5 passed      66330 compares
+    dma_channels_test          5/5 passed     135180 compares
+    dma_modes_test             5/5 passed      52380 compares
+    dma_bus_test               5/5 passed      95377 compares
+    dma_error_test             5/5 passed      97676 compares
+    dma_stop_test              5/5 passed      89757 compares
+    dma_bad_cfg_test           5/5 passed       7615 compares
+    dma_trigger_test           5/5 passed      45466 compares
+    dma_corner_test            5/5 passed      38465 compares
+    dma_restart_race_test      5/5 passed      13625 compares
+    dma_perf_test              5/5 passed      14255 compares
+    dma_rand_test              50/50 passed    2275653 compares
+    dma_rand_err_test          50/50 passed    2144161 compares
+    dma_rand_stop_test         50/50 passed    2137855 compares
+    dma_rand_reg_test          50/50 passed    2352687 compares
+  functional coverage: 315/315 bins
+    cg_active       32/32   bins hit
+    cg_bus          37/37   bins hit
+    cg_cfg          37/37   bins hit
+    cg_conc         40/40   bins hit
+    cg_error        41/41   bins hit
+    cg_irq           6/6    bins hit
+    cg_irq_clear     2/2    bins hit
+    cg_reg          52/52   bins hit
+    cg_ring         26/26   bins hit
+    cg_stop         31/31   bins hit
+    cg_trig          8/8    bins hit
+    cg_trig_evt      3/3    bins hit
+  DUT code coverage (merged over instances)      line        branch      expr        toggle
+    address_generator.sv        30/30       26/26       64/67     1736/2272 
+    ahb_read_manager.sv         31/43       38/48       99/112    1018/1376 
+    ahb_subordinate.sv          25/30       17/18       52/57      130/164  
+    ahb_write_manager.sv        41/55       54/62      130/142    1118/1356 
+    channel_csr.sv               1/1         2/2         2/2       874/1028 
+    channel_manager.sv          44/48       52/52      105/105    1140/1414 
+    dma_arbiter.sv               4/4         6/6         8/9       176/176  
+    dma_controller.sv             -          -          -      1270/1564 
+    dma_engine.sv                2/2         4/4        14/14      966/1150 
+    dma_fifo.sv                  8/8         8/8        21/21      538/538  
+    trigger_controller.sv        5/5        18/18      236/347    1244/1706 
+    socetlib_counter.sv          5/5         6/6          -       144/270  
+    total                      84.8 %      92.4 %      83.4 %      79.6 %   
+  line/branch holes: 54
+      miss branch ahb_read_manager.sv:309 else
+      miss branch ahb_read_manager.sv:309 if
+      miss branch ahb_read_manager.sv:310 if
+      miss branch ahb_read_manager.sv:310 else
+      miss branch ahb_read_manager.sv:336 cond_then
+      miss branch ahb_read_manager.sv:337 if
+      miss branch ahb_read_manager.sv:424 else
+      miss branch ahb_read_manager.sv:424 if
+      miss branch ahb_read_manager.sv:428 if
+      miss branch ahb_read_manager.sv:428 else
+      miss line   ahb_read_manager.sv:80 case
+      miss line   ahb_read_manager.sv:81 case
+      miss line   ahb_read_manager.sv:82 case
+      miss line   ahb_read_manager.sv:89 case
+      miss line   ahb_read_manager.sv:90 case
+      miss line   ahb_read_manager.sv:91 case
+      miss line   ahb_read_manager.sv:252 if
+      miss line   ahb_read_manager.sv:290 if
+      miss line   ahb_read_manager.sv:308 case
+      miss line   ahb_read_manager.sv:331 case
+      miss line   ahb_read_manager.sv:422 case
+      miss line   ahb_read_manager.sv:439 case
+      miss branch ahb_subordinate.sv:217 else
+      miss line   ahb_subordinate.sv:81 case
+      miss line   ahb_subordinate.sv:123 else
+      miss line   ahb_subordinate.sv:150 case
+      miss line   ahb_subordinate.sv:179 if
+      miss line   ahb_subordinate.sv:192 case
+      miss branch ahb_write_manager.sv:243 else
+      miss branch ahb_write_manager.sv:320 else
+      miss branch ahb_write_manager.sv:320 if
+      miss branch ahb_write_manager.sv:398 else
+      miss branch ahb_write_manager.sv:398 if
+      miss branch ahb_write_manager.sv:405 else
+      miss branch ahb_write_manager.sv:405 if
+      miss branch ahb_write_manager.sv:447 else
+      miss line   ahb_write_manager.sv:111 case
+      miss line   ahb_write_manager.sv:112 case
+      miss line   ahb_write_manager.sv:113 case
+      miss line   ahb_write_manager.sv:120 case
+      miss line   ahb_write_manager.sv:121 case
+      miss line   ahb_write_manager.sv:122 case
+      miss line   ahb_write_manager.sv:303 if
+      miss line   ahb_write_manager.sv:319 case
+      miss line   ahb_write_manager.sv:335 case
+      miss line   ahb_write_manager.sv:381 case
+      miss line   ahb_write_manager.sv:392 case
+      miss line   ahb_write_manager.sv:397 case
+      miss line   ahb_write_manager.sv:480 case
+      miss line   ahb_write_manager.sv:489 case
+      miss line   channel_manager.sv:190 case
+      miss line   channel_manager.sv:196 case
+      miss line   channel_manager.sv:212 case
+      miss line   channel_manager.sv:221 case
+
+== C4: NUM_CHANNELS=8 FIFO_DEPTH=32; 5 seed(s) per directed test, 50 per random test
+  tests
+    dma_smoke_test             5/5 passed       2570 compares
+    dma_reg_test               5/5 passed     140782 compares
+    dma_copy_test              5/5 passed      61945 compares
+    dma_channels_test          5/5 passed      38123 compares
+    dma_modes_test             5/5 passed      47580 compares
+    dma_bus_test               5/5 passed      92176 compares
+    dma_error_test             5/5 passed      93157 compares
+    dma_stop_test              5/5 passed      86182 compares
+    dma_bad_cfg_test           5/5 passed       2815 compares
+    dma_trigger_test           5/5 passed      40666 compares
+    dma_corner_test            5/5 passed      33665 compares
+    dma_restart_race_test      5/5 passed       8925 compares
+    dma_perf_test              5/5 passed       9455 compares
+    dma_rand_test              50/50 passed    1882240 compares
+    dma_rand_err_test          50/50 passed    1835711 compares
+    dma_rand_stop_test         50/50 passed    1874112 compares
+    dma_rand_reg_test          50/50 passed    1950134 compares
+  functional coverage: 267/267 bins
+    cg_active        8/8    bins hit
+    cg_bus          37/37   bins hit
+    cg_cfg          37/37   bins hit
+    cg_conc         16/16   bins hit
+    cg_error        41/41   bins hit
+    cg_irq           6/6    bins hit
+    cg_irq_clear     2/2    bins hit
+    cg_reg          52/52   bins hit
+    cg_ring         26/26   bins hit
+    cg_stop         31/31   bins hit
+    cg_trig          8/8    bins hit
+    cg_trig_evt      3/3    bins hit
+  DUT code coverage (merged over instances)      line        branch      expr        toggle
+    address_generator.sv        30/30       26/26       64/67     3746/4368 
+    ahb_read_manager.sv         31/43       38/48       99/112     870/1272 
+    ahb_subordinate.sv          25/30       17/18       52/57      130/164  
+    ahb_write_manager.sv        41/55       54/62      130/142     972/1268 
+    channel_csr.sv               1/1         2/2         2/2       764/1028 
+    channel_manager.sv          44/48       51/52      104/105    6004/8958 
+    dma_arbiter.sv               4/4         6/6         8/9        64/64   
+    dma_controller.sv             -          -          -      1068/1406 
+    dma_engine.sv                2/2         4/4        14/14     2678/2830 
+    dma_fifo.sv                  8/8         8/8        21/21      484/484  
+    trigger_controller.sv        5/5        18/18       92/107    1926/2738 
+    socetlib_counter.sv          5/5         6/6          -       132/270  
+    total                      84.8 %      92.0 %      92.1 %      75.8 %   
+  line/branch holes: 55
+      miss branch ahb_read_manager.sv:309 else
+      miss branch ahb_read_manager.sv:309 if
+      miss branch ahb_read_manager.sv:310 if
+      miss branch ahb_read_manager.sv:310 else
+      miss branch ahb_read_manager.sv:336 cond_then
+      miss branch ahb_read_manager.sv:337 if
+      miss branch ahb_read_manager.sv:424 else
+      miss branch ahb_read_manager.sv:424 if
+      miss branch ahb_read_manager.sv:428 if
+      miss branch ahb_read_manager.sv:428 else
+      miss line   ahb_read_manager.sv:80 case
+      miss line   ahb_read_manager.sv:81 case
+      miss line   ahb_read_manager.sv:82 case
+      miss line   ahb_read_manager.sv:89 case
+      miss line   ahb_read_manager.sv:90 case
+      miss line   ahb_read_manager.sv:91 case
+      miss line   ahb_read_manager.sv:252 if
+      miss line   ahb_read_manager.sv:290 if
+      miss line   ahb_read_manager.sv:308 case
+      miss line   ahb_read_manager.sv:331 case
+      miss line   ahb_read_manager.sv:422 case
+      miss line   ahb_read_manager.sv:439 case
+      miss branch ahb_subordinate.sv:217 else
+      miss line   ahb_subordinate.sv:81 case
+      miss line   ahb_subordinate.sv:123 else
+      miss line   ahb_subordinate.sv:150 case
+      miss line   ahb_subordinate.sv:179 if
+      miss line   ahb_subordinate.sv:192 case
+      miss branch ahb_write_manager.sv:243 else
+      miss branch ahb_write_manager.sv:320 else
+      miss branch ahb_write_manager.sv:320 if
+      miss branch ahb_write_manager.sv:398 else
+      miss branch ahb_write_manager.sv:398 if
+      miss branch ahb_write_manager.sv:405 else
+      miss branch ahb_write_manager.sv:405 if
+      miss branch ahb_write_manager.sv:447 else
+      miss line   ahb_write_manager.sv:111 case
+      miss line   ahb_write_manager.sv:112 case
+      miss line   ahb_write_manager.sv:113 case
+      miss line   ahb_write_manager.sv:120 case
+      miss line   ahb_write_manager.sv:121 case
+      miss line   ahb_write_manager.sv:122 case
+      miss line   ahb_write_manager.sv:303 if
+      miss line   ahb_write_manager.sv:319 case
+      miss line   ahb_write_manager.sv:335 case
+      miss line   ahb_write_manager.sv:381 case
+      miss line   ahb_write_manager.sv:392 case
+      miss line   ahb_write_manager.sv:397 case
+      miss line   ahb_write_manager.sv:480 case
+      miss line   ahb_write_manager.sv:489 case
+      miss branch channel_manager.sv:263 else
+      miss line   channel_manager.sv:190 case
+      miss line   channel_manager.sv:196 case
+      miss line   channel_manager.sv:212 case
+      miss line   channel_manager.sv:221 case
+
+  T43 NUM_CHANNELS=1   rejected at elaboration (rtl/source/trigger_controller.sv:92:69: Size-changing cast to zero or negative size: 0)
+  T43 NUM_CHANNELS=3   rejected at elaboration (rtl/source/dma_controller.sv:29:5: dma_controller: NUM_CHANNELS must be a power of 2 from )
+  T43 NUM_CHANNELS=64  rejected at elaboration (rtl/source/dma_controller.sv:29:5: dma_controller: NUM_CHANNELS must be a power of 2 from )
+
+REGRESSION PASSED
