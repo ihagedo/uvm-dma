@@ -4,6 +4,7 @@
 |---|---|
 | RTL | `rtl/source/dma_controller.sv` |
 | Spec | `dma-spec.md` version 1.2 |
+| CSV | `dma-test-plan.csv`: configurations, test items, coverage and assertions, one row each |
 
 ## 1. Scope
 
@@ -108,6 +109,109 @@ dma_sva bound to the DUT
 
 Code coverage target: 100% line and branch, holes explained.
 
+### 5.1 Covergroup definitions
+
+The covergroups are in `environment/dma_coverage.svh`. The scoreboard samples them at the points named below. Goal: every bin hit at least once in every configuration. `CH[]` has one bin per channel, so its size follows `NUM_CHANNELS`.
+
+**`cg_cfg`**: each time software starts a channel (`CONTROL` written with `ENABLE` = 1 while stopped).
+
+| Item | Bins |
+|---|---|
+| `cp_mode` | `MODE`: `ONESHOT` 0; `CONTINUOUS` 1; `RING` 2; `INVALID` 3–7 |
+| `cp_size` | `SIZE`: `BYTE` 0; `HALF` 1; `WORD` 2 |
+| `mode_x_size` | `cp_mode` × `cp_size` |
+| `cp_sinc`, `cp_dinc` | `SOURCE_INCR`, `DEST_INCR` against the item size: `ZERO` 0; `EQ_SIZE` the item size; `TWICE` twice the item size; `MAX255` 255; `OTHER` any other step |
+| `cp_len` | `DESIRED_TRANSFERS`: `L1` 1; `L2_3` 2–3; `L4` 4; `L5_15` 5–15; `L16` 16; `L17` 17; `L18_255` 18–255; `L256_UP` 256 and up. Not counted in ring mode or at zero length |
+
+**`cg_ring`**: at the same start, ring mode only.
+
+| Item | Bins |
+|---|---|
+| `cp_rsize` | `RING_SIZE`: `RS[0]`–`RS[7]`, one bin per value |
+| `cp_bsel` | `BUFFER_SEL`: `SRC_STEPS` 0; `DST_STEPS` 1 |
+| `rsize_x_bsel` | `cp_rsize` × `cp_bsel` |
+
+**`cg_conc`**: at the same start.
+
+| Item | Bins |
+|---|---|
+| `cp_active` | Channels running, this one included: `ONE` 1; `TWO` 2; `SOME` 3 to `NUM_CHANNELS`−1; `ALL` `NUM_CHANNELS` |
+| `cp_chan` | Starting channel: `CH[0]` to `CH[NUM_CHANNELS−1]` |
+| `cp_pair` | Modes of this channel and the first other running channel: `OS_OS` both one-shot; `OS_RING` one-shot and ring; `RING_RING` both ring; `CONT_ANY` either continuous. Not counted when the channel runs alone |
+
+**`cg_bus`**: every data beat on the read or write port.
+
+| Item | Bins |
+|---|---|
+| `cp_port` | `RD` read port; `WR` write port |
+| `cp_burst` | `SINGLE`; `INCR4` |
+| `port_x_burst` | `cp_port` × `cp_burst` |
+| `cp_waits` | Wait states on the beat: `W0` 0; `W1` 1; `W2_4` 2–4; `W5_UP` 5 and up |
+| `cp_beat` | `SINGLE`; `B0`–`B3` beat of an INCR4 burst |
+| `waits_x_beat` | `cp_waits` × `cp_beat` |
+
+**`cg_error`**: every ERROR response on the read or write port.
+
+| Item | Bins |
+|---|---|
+| `cp_port` | `RD`; `WR` |
+| `cp_pos` | Failing item in the copy or pass: `FIRST`; `MIDDLE`; `LAST` |
+| `cp_beat` | `SINGLE`; `B0`–`B3` beat of an INCR4 burst |
+| `cp_mode` | `ONESHOT`; `CONTINUOUS`; `RING` |
+| `cp_others` | `ALONE`; `WITH_OTHERS` another channel running |
+| `port_x_pos`, `port_x_beat`, `port_x_mode`, `port_x_others` | `cp_port` × each of the other items |
+
+**`cg_stop`**: each stop of a channel in a valid mode, by software (`ABORT`, or `ENABLE` = 0) or by reset while running.
+
+| Item | Bins |
+|---|---|
+| `cp_kind` | `ABORT` `ABORT` = 1 with `ENABLE` = 0; `DISABLE` `ENABLE` = 0; `RESET` `nRST` |
+| `cp_phase` | `BEFORE_FIRST_READ` no item read yet; `MID` copying; `LAST_WRITES` one-shot with every item read, writes pending; `AFTER_DONE` one-shot done, or a full pass written in continuous or ring |
+| `cp_mode` | `ONESHOT`; `CONTINUOUS`; `RING` |
+| `kind_x_phase`, `kind_x_mode` | `cp_kind` × `cp_phase`; `cp_kind` × `cp_mode` |
+
+**`cg_reg`**: every transfer on the register port.
+
+| Item | Bins |
+|---|---|
+| `cp_reg` | `SOURCE`; `DESTINATION`; `CONTROL`; `DESIRED` `DESIRED_TRANSFERS`; `COMPLETED` `TRANSFERS_COMPLETED`; `REMAINING` `TRANSFERS_REMAINING`; `ACTIVE` `CURRENT_CHANNEL_ACTIVE`; `ERRADDR` `ERROR_ADDRESS`; `TCFG` `TRIGGER_CONFIG`; `TSTAT` `TRIGGER_STATUS`; `UNMAPPED` no register |
+| `cp_rw` | `READ`; `WRITE` |
+| `cp_resp` | `OKAY`; `ERROR` |
+| `reg_x_rw_x_resp` | `cp_reg` × `cp_rw` × `cp_resp` |
+| `cp_access` | `WORD` aligned word; `SUBWORD_AT_0` aligned byte or halfword; `UNALIGNED` address not word-aligned; `UNMAPPED` no register; `PARTIAL_STROBE` write with `HWSTRB` ≠ `4'hF` |
+
+**`cg_trig`**: each trigger edge on an armed channel's line.
+
+| Item | Bins |
+|---|---|
+| `cp_count` | `COUNT`: `ZERO` 0; `ONE` 1; `MID` 2–254; `MAX` 255 |
+| `cp_credit` | `CREDIT` before the edge: `ZERO` 0; `ONE` 1; `MID` 2–4094; `MAX` 4095 |
+
+**`cg_trig_evt`**: each of the three trigger events below.
+
+| Item | Bins |
+|---|---|
+| `cp_evt` | `OVERRUN_SEEN` `TRIGGER_STATUS` read with `OVERRUN` = 1; `OVERRUN_CLEARED` `TRIGGER_STATUS` written while `OVERRUN` may be set; `DISARM_WITH_CREDIT` `ARM` = 0 written with `CREDIT` > 0 |
+
+**`cg_irq`**: each rising edge of `dma_interrupt`.
+
+| Item | Bins |
+|---|---|
+| `cp_cause` | What last set `DONE` or `ERROR` on the first channel with one set: `ONESHOT_DONE` one-shot copy finished; `PASS_DONE` continuous or ring pass finished; `BUS_ERROR` bus error; `SW_WRITE` software wrote `DONE` or `ERROR` = 1 |
+| `cp_srcs` | Channels with `DONE` or `ERROR` set: `ONE` 1; `SEVERAL` 2 and up |
+
+**`cg_irq_clear`**: each `CONTROL` write that clears a set `DONE` or `ERROR`.
+
+| Item | Bins |
+|---|---|
+| `cp_others` | Other channels with `DONE` or `ERROR` still set: `LAST_ONE` none, so the interrupt falls; `OTHERS_STILL_SET` 1 and up |
+
+**`cg_active`**: each `CURRENT_CHANNEL_ACTIVE` read that returns a nonzero value.
+
+| Item | Bins |
+|---|---|
+| `cp_chan` | Channel read: `CH[0]` to `CH[NUM_CHANNELS−1]` |
+
 ## 6. Assertions
 
 | ID | Property | Spec rule |
@@ -198,3 +302,4 @@ Revisions A to E are example entries for the course. The real history of this do
 | 0.1 | 2026-10-06 | 1.0 | First draft |
 | 0.2 | 2026-10-08 | 1.1 | Bench built; T44, T45, SVA11, SVA12, B7–B13 |
 | 0.3 | 2026-10-08 | 1.2 | RTL fixed; waivers and expected fails removed; C5 dropped |
+| 0.4 | 2026-10-12 | 1.2 | Covergroup definitions (5.1); CSV version |
